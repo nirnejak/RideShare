@@ -25,7 +25,7 @@ app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'ProjectVert'
+app.config['MYSQL_DB'] = 'RideShare'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 #init MYSQL
@@ -112,13 +112,8 @@ def login():
 				session['userStatus'] = userStatus
 				session['userType'] = userType
 				
-				if userType == 'CUSTOMER':
-					if userStatus == 'LOGGEDIN':
-						msg = "Welcome To Ride Sharing. Get Your ride <a href=\"{}\" class=\"alert-link\">{}</a>".format(data['fname'],data['lname'], url_for('/nearbyRides'), "Nearby Rides")
-						flash(msg,'warning')
-				else:
-					msg = "Welcome {} {}".format(data['fname'],data['lname'])
-					flash(msg,'success')
+				msg = "Welcome {} {}".format(data['fname'],data['lname'])
+				flash(msg,'success')
 
 				return redirect(url_for('dashboard'))
 			else:
@@ -150,19 +145,41 @@ def dashboard():
 # this part of code was buggy so some parts are removed
 
 @app.route('/nearbyRides', methods=['GET','POST'])
+@is_logged_in
 def nearbyRides():
     return render_template('nearbyRides.html')
 
 @app.route('/rideRequests', methods=['GET','POST'])
+@is_logged_in
 def rideRequests():
     return render_template('rideRequests.html')
 
 
 @app.route('/shareRide', methods=['GET','POST'])
+@is_logged_in
 def shareRide():
-    return render_template('shareRide.html')
+	if request.method == 'POST':
+		rideDate = request.form['rideDate']
+		fromLocation = request.form['fromLocation']
+		toLocation = request.form['toLocation']
+		city = request.form['city']
+		state = request.form['state']
 
+		# Create cursor
+		cur = mysql.connection.cursor()
 
+		# Add User into Database
+		cur.execute("INSERT INTO Ride(creatorUserId, rideDate, fromLocation, toLocation, city, state) VALUES (%s, %s, %s, %s, %s, %s)", (session['userId'], rideDate, fromLocation, toLocation, city, state))
+
+		# Comit to DB
+		mysql.connection.commit()
+
+		# Close connection
+		cur.close()
+
+		flash('Your ride is shared people around you can now send you request for your ride','success')
+		return redirect(url_for('dashboard'))
+	return render_template('shareRide.html')
 
 
 if __name__ == '__main__':
