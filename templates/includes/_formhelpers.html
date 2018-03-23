@@ -1,0 +1,18 @@
+{% macro render_field(field) %}
+	{% if field.errors %}
+		{% set errorKwargs = {
+			'class_' : kwargs['class_']+" is-invalid",
+			'placeholder' : kwargs['placeholder']
+			}
+		%}
+
+		{{ field(**errorKwargs)|safe }}
+		{% for error in field.errors %}
+			<small class="form-text text-danger">&nbsp;&nbsp;&nbsp;&nbsp;{{ error }}</small>
+		{% endfor %}
+		<br>
+	{% else %}
+		{{ field(**kwargs)|safe }}
+		<br>
+	{% endif %}
+{% endmacro %}

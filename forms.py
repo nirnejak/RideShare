@@ -1,0 +1,22 @@
+from wtforms import Form, StringField, IntegerField, TextAreaField, PasswordField, validators
+
+# Register Form Class
+class RegisterForm(Form):
+	fname = StringField('First Name', [validators.Length(min = 1, max = 50)], description='First Name')
+	lname = StringField('Last Name', [validators.Length(min = 1, max = 50)], description='Last Name')
+	contactNo = StringField('Contact Number', [validators.Length(min = 1, max = 15)], description='Contact No')
+	alternateContactNo = StringField('Alternate Contact Number', [validators.Length(min = 0, max = 15)], description='Alternate Contact No')
+	email = StringField('Email', [validators.Length(min = 0, max = 50)], description='Email')
+
+	password = PasswordField('Password',[
+			validators.DataRequired(),
+			validators.EqualTo('confirm', message='Passwords do not match')
+		], description='Password')
+	confirm = PasswordField('Confirm Password', description='Confirm Password')
+
+	addLine1 = StringField('Address Line 1', [validators.Length(min = 1, max = 100)], description='Address Line 1')
+	addLine2 = StringField('Address Line 2', [validators.Length(min = 0, max = 100)], description='Address Line 2')
+
+	colony = StringField('Colony', [validators.Length(min = 1, max = 50)], description='Colony')
+	city = StringField('City', [validators.Length(min = 1, max = 50)], description='City')
+	state = StringField('State', [validators.Length(min = 1, max = 50)], description='State')

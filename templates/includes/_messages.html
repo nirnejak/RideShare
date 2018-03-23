@@ -1,0 +1,24 @@
+{% with messages = get_flashed_messages(with_categories = true) %}
+	{% if messages %}
+		{% for category, message in messages %}
+			<div class="alert alert-dismissible alert-{{ category }} animated {% if category in ["danger","warning"]%}shake{% else %}bounceIn{% endif %}">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				{{ message | safe }}
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+
+{% if error %}
+	<div class="alert alert-dismissible alert-danger">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ error }}
+	</div>
+{% endif %}
+
+{% if msg %}
+	<div class="alert alert-dismissible alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ msg }}
+	</div>
+{% endif %}

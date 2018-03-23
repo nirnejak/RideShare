@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h1 class="animated fadeIn">Dashboard</h1>
+	<br>
+	<hr>
+		<div class="jumbotron animated fadeInUp">
+			Welcome to RideShare
+			<br><br>
+			{% if not session.logged_in %}
+				<form action="login" method="POST">
+					<div class="form-group">
+						<input type="text" name="username" placeholder="Contact No. or Email" class="form-control" value="{{ request.form.username }}" required>
+					</div>
+					<div class="form-group">
+						<input type="password" name="password" class="form-control" placeholder="Password" value="{{ request.form.password }}" required>
+					</div>
+					<p class="text-center">
+						<button type="submit" class="btn btn-primary">Login</button>
+					</p>
+				</form>
+			{% endif %}
+		</div>
+
+	<hr>
+{% endblock %}

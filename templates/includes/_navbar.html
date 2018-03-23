@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+  <a class="navbar-brand" href="/">RideShare</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+      {% if session.logged_in %}
+          <li class="nav-item">
+            <a class="nav-link" href="/shareRide">Share Ride</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/rideRequests">Ride Requests</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/nearbyRides">Nearby Rides</a>
+          </li>
+      {% endif %}
+    </ul>
+    <ul class="navbar-nav navbar-right">
+      {% if session.logged_in %}
+        &nbsp;&nbsp;&nbsp;
+        <li class="nav-item">
+          <a class="btn btn-secondary" href="/dashboard">Dashboard</a>
+        </li> 
+        &nbsp;&nbsp;&nbsp;
+        <li class="nav-item">
+          <a class="btn btn-success" href="/logout">Logout</a>
+        </li>
+      {% else %}
+        &nbsp;&nbsp;&nbsp;
+        <li class="nav-item">
+          <a class="btn btn-secondary" href="/register">Register</a>
+        </li>
+        &nbsp;&nbsp;&nbsp;
+        <li class="nav-item">
+          <a class="btn btn-success" href="/login">Login</a>
+        </li>
+      {% endif %}
+    </ul> 
+  </div>
+</nav>

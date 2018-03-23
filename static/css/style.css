@@ -1,0 +1,257 @@
+.social [class*="fab fa-"] {
+    background-color: #233240;
+    color: #18BC9C;
+
+    border-radius: 30px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    margin: auto 3px;
+    width: 30px;
+    font-size: 15px;
+    text-align: center;
+}
+.fab:hover {
+    background-color: #18BC9C; 
+    color: #233240;
+}
+
+section[class^="pw-"] {
+	opacity: 0.7;
+  min-height: 25vh;
+  position: relative;
+
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.pw-1 {
+	background-image: url('../img/parallax/newspaper.jpg');
+}
+.pw-2 {
+	background-image: url('../img/parallax/bottles.jpg');
+}
+.pw-3 {
+	background-image: url('../img/parallax/can.jpg');
+}
+.pw-4 {
+	background-image: url('../img/parallax/team.jpg');
+}
+
+@media (max-width: 700px) {
+	.pw-1, .pw-2, .pw-3, .pw-4, .mainSection {
+    background-attachment: scroll;
+	}
+  .mainSection {
+    margin-top: 70px;
+    min-height: 60vh !important;
+    max-height: 60vh !important;
+  }
+  .mainSection:before {
+    min-height: 60vh !important;
+    max-height: 60vh !important;
+    display: none;
+  }
+  .mainSectionLinks {
+    display: none;
+  }
+  footer {
+    justify-content: center;
+    flex-direction: column !important;
+    padding: 0px;
+  }
+  footer > p {
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+.active {
+    border-bottom: 3px #18BC9C;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+
+  flex-direction: column;
+
+  height: 100%;
+
+  min-width: 100%;
+  max-width: 100%;
+
+  text-align: center;
+
+  padding-top: 30px;
+}
+
+footer {
+  background: #233240;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+  align-self: center !important;
+
+  flex-direction: row;
+
+  text-align: center;
+
+  min-width: 100%;
+  max-width: 100%;
+}
+
+footer > p {
+  min-width: 50%;
+  max-width: 50%;
+  font-size: 75%;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mainSection {
+  min-height: 82vh;
+  max-height: 82vh;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: overlay;
+
+  background-attachment: fixed;
+
+  transition: all 3s ease-in;
+
+  -webkit-animation: slideShow 40s infinite;
+  -o-animation: slideShow 40s infinite;
+  animation: slideShow 40s infinite;
+}
+
+.mainSection:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: radial-gradient(circle at center, transparent, black);
+  opacity: .6;
+  
+  min-height: 82vh !important;
+  max-height: 82vh !important;
+}
+
+.mainSection  > .title {
+  letter-spacing: 1vw;
+  font-size: 8vw;
+}
+
+@keyframes slideShow {
+  0% {
+    background-image: url("../img/slide/1.jpg");
+  }
+  25% {
+    background-image: url("../img/slide/2.jpg");
+  }
+  50% {
+    background-image: url("../img/slide/3.jpg");
+  }
+  75% {
+    background-image: url("../img/slide/4.jpg");
+  }
+}
+
+@-webkit-keyframes slideShow {
+  0% {
+    background-image: url("../img/slide/1.jpg");
+  }
+  25% {
+    background-image: url("../img/slide/2.jpg");
+  }
+  50% {
+    background-image: url("../img/slide/3.jpg");
+  }
+  75% {
+    background-image: url("../img/slide/4.jpg");
+  }
+}
+
+@-moz-keyframes slideShow {
+  0% {
+    background-image: url("../img/slide/1.jpg");
+  }
+  25% {
+    background-image: url("../img/slide/2.jpg");
+  }
+  50% {
+    background-image: url("../img/slide/3.jpg");
+  }
+  75% {
+    background-image: url("../img/slide/4.jpg");
+  }
+}
+
+@-o-keyframes slideShow {
+  0% {
+    background-image: url("../img/slide/1.jpg");
+  }
+  25% {
+    background-image: url("../img/slide/2.jpg");
+  }
+  50% {
+    background-image: url("../img/slide/3.jpg");
+  }
+  75% {
+    background-image: url("../img/slide/4.jpg");
+  }
+}
+
+.dot1, .dot3 {
+    float : left;
+    -webkit-animation: blink1 1s infinite;
+    animation: blink1 1s infinite;
+}
+.dot2, .dot4 {
+    float : left;
+    -webkit-animation: blink2 1s infinite;
+    animation: blink2 1s infinite;
+}
+
+@keyframes blink1{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes blink2{
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes blink1{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes blink2{
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
