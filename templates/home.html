@@ -1,13 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<h1 class="animated fadeIn">Dashboard</h1>
+	<h1 class="animated fadeIn"></h1>
 	<br>
 	<hr>
 		<div class="jumbotron animated fadeInUp">
 			Welcome to RideShare
 			<br><br>
-			{% if not session.logged_in %}
+			{% if session.logged_in %}
+				<div class="text-center">
+					<a class="btn btn-lg btn-success" href="/shareRide">Share Ride</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="btn btn-lg btn-primary" href="/nearbyRides">Nearby Rides</a>
+				</div>
+			{% else %}
 				<form action="login" method="POST">
 					<div class="form-group">
 						<input type="text" name="username" placeholder="Contact No. or Email" class="form-control" value="{{ request.form.username }}" required>
@@ -21,6 +27,5 @@
 				</form>
 			{% endif %}
 		</div>
-
 	<hr>
 {% endblock %}

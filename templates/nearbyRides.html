@@ -9,5 +9,25 @@
 	</p>
 	<hr>
 	<div class="row">
+		{% for ride in rides %}
+			<div class="col-lg-4 animated fadeInUp">
+				<div class="card border-primary mb-3">
+					<div class="card-header">{{ ride.rideTime }}</div>
+					<div class="card-body text-primary">
+						<h4 class="card-title">{{ ride.fromLocation }}&nbsp;to&nbsp;{{ ride.toLocation }}</h4>
+						<p class="card-text">
+							<p>
+								{{ ride.city }},
+								{{ ride.state }},
+							</p>
+							<form action="" method="POST" class="text-center">
+								<input type="hidden" value="{{ RideId }}" name="rideId">
+								<button class="btn btn-primary" type="submit">Send Request</button>
+							</form>
+						</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 {% endblock %}

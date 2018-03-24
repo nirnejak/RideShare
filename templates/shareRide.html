@@ -9,27 +9,31 @@
 	</p>
 	<hr>
 	<div class="row">
-		<form action="" method="POST">
-			<div class="form-group">
-				<input type="text" name="fromLocation" placeholder="From" class="form-control" required>
-			</div>
-			<div class="form-group">
-				<input type="text" name="toLocation" placeholder="To" class="form-control" required>
-			</div>
-			<div class="form-group">
-				<input type="text" name="city" placeholder="City" class="form-control" required>
-			</div>
-			<div class="form-group">
-				<input type="text" name="state" placeholder="State" class="form-control" required>
-			</div>
-			<div class="form-group">
-				<input type="date" name="rideDate" placeholder="Date and Time" class="form-control" required>
-			</div>
-			<div class="form-group">
-				<input type="time" name="date" placeholder="Date and Time" class="form-control" required>
-			</div>
-				<button type="submit" class="btn btn-primary">Share Ride</button>
-			</p>
-		</form>
+		<div class="card-body text-primary">
+			<form action="" method="POST">
+				<div class="form-group">
+					<input type="text" name="fromLocation" placeholder="From" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="toLocation" placeholder="To" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="city" placeholder="City" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="state" placeholder="State" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<label for="date">Date</label>
+					<input type="date" id="date" name="rideDate" placeholder="Date and Time" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<label for="time">Time</label>
+					<input type="time" id="time" name="rideTime" placeholder="Date and Time" class="form-control" required>
+				</div>
+					<button type="submit" class="btn btn-primary">Share Ride</button>
+				</p>
+			</form>
+		</div>
 	</div>
 {% endblock %}
