@@ -215,7 +215,7 @@ def rideRequests():
 		flash('No Requests for Your Ride!','warning')
 		return redirect(url_for('dashboard'))
 
-    return render_template('rideRequests.html')
+	return render_template('rideRequests.html')
 
 
 @app.route('/shareRide', methods=['GET','POST'])
