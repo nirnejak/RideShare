@@ -25,3 +25,25 @@ def is_logged_in(f):
 			flash('Unauthorized, Please Login','danger')
 			return redirect(url_for('login'))
 	return wrap
+
+# Check if user has aadhar ID
+def has_aadhar(f):
+	@wraps(f)
+	def wrap(*args, **kwargs):
+		if session['userStatus'] in ['BOTH','AADHAR']:
+			return f(*args, **kwargs)
+		else:
+			flash('You Don\'t have Aadhar ID','warning')
+			return redirect(url_for('login'))
+	return wrap
+
+# Check if user has driving license
+def has_driving(f):
+	@wraps(f)
+	def wrap(*args, **kwargs):
+		if session['userStatus'] in ['BOTH','DRIVING']:
+			return f(*args, **kwargs)
+		else:
+			flash('You Don\'t have Driving License','warning')
+			return redirect(url_for('login'))
+	return wrap

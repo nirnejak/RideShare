@@ -1,0 +1,10 @@
+1. Python 3.6
+2. Environment Variable in python
+3. COmmands
+	pip install flask
+	pip install flask-mysqldb
+	pip install passlib
+
+4. install xampp
+5. create database 'RideShare'
+6. create Tables

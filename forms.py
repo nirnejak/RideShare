@@ -4,9 +4,12 @@ from wtforms import Form, StringField, IntegerField, TextAreaField, PasswordFiel
 class RegisterForm(Form):
 	fname = StringField('First Name', [validators.Length(min = 1, max = 50)], description='First Name')
 	lname = StringField('Last Name', [validators.Length(min = 1, max = 50)], description='Last Name')
+	gender = StringField('Gender', [validators.Length(min = 1, max = 50)], description='Gender')
+	driving = StringField('Driving License No', description='Driving License No.')
+	aadhar = StringField('Aadhar Card No.', description='Aadhar Card No.')
 	contactNo = StringField('Contact Number', [validators.Length(min = 1, max = 15)], description='Contact No')
 	alternateContactNo = StringField('Alternate Contact Number', [validators.Length(min = 0, max = 15)], description='Alternate Contact No')
-	email = StringField('Email', [validators.Length(min = 0, max = 50)], description='Email')
+	emailID = StringField('Email', [validators.Length(min = 0, max = 50)], description='Email')
 
 	password = PasswordField('Password',[
 			validators.DataRequired(),

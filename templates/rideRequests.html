@@ -9,5 +9,23 @@
 	</p>
 	<hr>
 	<div class="row">
+		{% for rideRequests in rideRequests %}
+			<div class="col-lg-4 animated fadeInUp">
+				<div class="card border-primary mb-3">
+					<div class="card-header"></div>
+					<div class="card-body text-primary">
+						<h4 class="card-title">&nbsp;to&nbsp;</h4>
+						<p class="card-text">
+							<p>
+							</p>
+							<form action="" method="POST" class="text-center">
+								<input type="hidden" value="{{ RequestsId }}" name="rideId">
+								<button class="btn btn-primary" type="submit">Send Request</button>
+							</form>
+						</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 {% endblock %}

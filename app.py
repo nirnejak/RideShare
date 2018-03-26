@@ -15,6 +15,8 @@ import os
 # Import from own library
 from decorators import is_logged_in
 from decorators import is_not_logged_in
+from decorators import has_aadhar
+from decorators import has_driving
 
 # Importing Forms
 from forms import RegisterForm
@@ -52,7 +54,10 @@ def register():
 		lname = form.lname.data
 		contactNo = form.contactNo.data
 		alternateContactNo = form.alternateContactNo.data
-		email = form.email.data
+		emailID = form.emailID.data
+		gender = str(form.gender.data).upper()
+		driving = form.driving.data
+		aadhar = form.aadhar.data
 		password = sha256_crypt.encrypt(str(form.password.data))
 
 		# User Address
@@ -65,8 +70,18 @@ def register():
 		# Create cursor
 		cur = mysql.connection.cursor()
 
-		# Add User into Database
-		cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state))
+		if len(aadhar)==0 and len(driving)==0:
+			# Add User into Database
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"NONE"))
+		elif len(aadhar)!=0 and len(driving)==0:
+			# Add User into Database
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"AADHAR"))
+		elif len(aadhar)==0 and len(driving)!=0:
+			# Add User into Database
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"DRIVING"))
+		elif len(aadhar)!=0 and len(driving)!=0:
+			# Add User into Database
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"BOTH"))
 
 		# Comit to DB
 		mysql.connection.commit()
@@ -150,6 +165,9 @@ def dashboard():
 @is_logged_in
 def nearbyRides():
 	if request.method == 'POST':
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have Aadhar ID!','warning')
+			return redirect(url_for('dashboard'))
 		RideId = request.form['rideId']
 
 		# Create cursor
@@ -165,9 +183,14 @@ def nearbyRides():
 		cur.close()
 
 		
-		flash('Your Request for Ride is sent to the user!','warning')
+		flash('Your Request for Ride is sent to the user!','success')
 		return redirect(url_for('dashboard'))
 	
+
+	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
+		flash('You Don\'t have Aadhar ID!','warning')
+		return redirect(url_for('dashboard'))
+
 	# Create cursor
 	cur = mysql.connection.cursor()
 
@@ -192,7 +215,13 @@ def nearbyRides():
 @is_logged_in
 def rideRequests():
 	if request.method == 'POST':
-		pass
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have Driving License!','warning')
+			return redirect(url_for('dashboard'))
+
+	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have Driving License!','warning')
+			return redirect(url_for('dashboard'))
 
 	# Create cursor
 	cur = mysql.connection.cursor()
@@ -217,11 +246,14 @@ def rideRequests():
 
 	return render_template('rideRequests.html')
 
-
 @app.route('/shareRide', methods=['GET','POST'])
 @is_logged_in
 def shareRide():
 	if request.method == 'POST':
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have Driving License!','warning')
+			return redirect(url_for('dashboard'))
+
 		rideDate = request.form['rideDate']
 		rideTime = request.form['rideTime']
 		fromLocation = request.form['fromLocation']
@@ -242,6 +274,10 @@ def shareRide():
 		cur.close()
 
 		flash('Your ride is shared people around you can now send you request for your ride','success')
+		return redirect(url_for('dashboard'))
+	
+	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+		flash('You Don\'t have Driving License!','warning')
 		return redirect(url_for('dashboard'))
 	return render_template('shareRide.html')
 
