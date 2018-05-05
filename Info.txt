@@ -1,6 +1,6 @@
 1. Python 3.6
 2. Environment Variable in python
-3. COmmands
+3. Commands
 	pip install flask
 	pip install flask-mysqldb
 	pip install passlib

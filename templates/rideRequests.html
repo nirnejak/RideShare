@@ -5,11 +5,11 @@
 	<br>
 	<hr>
 	<p class="lead">
-		All the Requests for the rides sent to you
+		All the Requests for joining your ride
 	</p>
 	<hr>
 	<div class="row">
-		{% for rideRequests in rideRequests %}
+		{% for rideRequest in rideRequests %}
 			<div class="col-lg-4 animated fadeInUp">
 				<div class="card border-primary mb-3">
 					<div class="card-header"></div>
@@ -20,7 +20,7 @@
 							</p>
 							<form action="" method="POST" class="text-center">
 								<input type="hidden" value="{{ RequestsId }}" name="rideId">
-								<button class="btn btn-primary" type="submit">Send Request</button>
+								<button class="btn btn-primary" type="submit">Accept Request</button>
 							</form>
 						</p>
 					</div>

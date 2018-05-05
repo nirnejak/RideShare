@@ -163,6 +163,7 @@ def dashboard():
 
 @app.route('/nearbyRides', methods=['GET','POST'])
 @is_logged_in
+@has_aadhar
 def nearbyRides():
 	if request.method == 'POST':
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
@@ -213,6 +214,7 @@ def nearbyRides():
 
 @app.route('/rideRequests', methods=['GET','POST'])
 @is_logged_in
+@has_driving
 def rideRequests():
 	if request.method == 'POST':
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
@@ -248,6 +250,7 @@ def rideRequests():
 
 @app.route('/shareRide', methods=['GET','POST'])
 @is_logged_in
+@has_driving
 def shareRide():
 	if request.method == 'POST':
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
