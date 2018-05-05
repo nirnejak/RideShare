@@ -1,4 +1,4 @@
-# TrashhCashh
+# RideShare
 
 Application for RideShare
 
