@@ -40,3 +40,7 @@ CREATE TABLE ShareRequest(
 	RideID INT(11),
 	requestUserId INT(11) # ID of user who sent the request
 );
+
+
+# UPDATE users SET userType="ADMIN" WHERE userid = 2
+# UPDATE users SET userType="CUSTOMER" WHERE userid = 2

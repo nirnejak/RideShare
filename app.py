@@ -72,7 +72,7 @@ def register():
 
 		if len(aadhar)==0 and len(driving)==0:
 			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"NONE"))
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, "NONE"))
 		elif len(aadhar)!=0 and len(driving)==0:
 			# Add User into Database
 			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"AADHAR"))
@@ -230,7 +230,7 @@ def rideRequests():
 
 	# Add User into Database
 
-	result = cur.execute("SELECT * FROM ShareRequest")
+	result = cur.execute("SELECT * FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
 
 	rideRequests = cur.fetchall()
 
@@ -284,6 +284,66 @@ def shareRide():
 		return redirect(url_for('dashboard'))
 	return render_template('shareRide.html')
 
+
+@app.route('/settings', methods=['GET','POST'])
+@is_logged_in
+def settings():
+	if request.method == 'POST':
+		contactNo = request.form['contactNo']
+		alternateContactNo = request.form['alternateContactNo']
+		email = request.form['email']
+		gender = request.form['gender']
+		driving = request.form['driving']
+		aadharID = request.form['aadharID']
+		addLine1 = request.form['addLine1']
+		addLine2 = request.form['addLine2']
+		colony = request.form['colony']
+		city = request.form['city']
+		state = request.form['state']
+
+
+		if len(aadharID)==0 and len(driving)==0:
+			userStatus = "NONE"
+		elif len(aadharID)!=0 and len(driving)==0:
+			userStatus = "AADHAR"
+		elif len(aadharID)==0 and len(driving)!=0:
+			userStatus = "DRIVING"
+		elif len(aadharID)!=0 and len(driving)!=0:
+			userStatus = "BOTH"
+
+		# Create cursor
+		cur = mysql.connection.cursor()
+
+		# Add User into Database
+		cur.execute("UPDATE users SET contactNo=%s, alternateContactNo=%s, email=%s, gender = %s, driving=%s, aadhar=%s, addLine1=%s, addLine2= %s, colony= %s, city=%s, state = %s, userStatus = %s WHERE userId = %s",(contactNo, alternateContactNo, email, gender, driving, aadharID, addLine1, addLine2, colony, city, state, userStatus, session['userId']))
+
+		session['userId'] = userStatus
+
+		# Comit to DB
+		mysql.connection.commit()
+
+		# Close connection
+		cur.close()
+
+
+		flash('Profile Updated Successfully','success')
+		return redirect(url_for('dashboard'))
+
+	# Create cursor
+	cur = mysql.connection.cursor()
+
+	# Add User into Database
+	result = cur.execute("SELECT * FROM users WHERE userId = %s", [session['userId']])
+
+	userData = cur.fetchone()
+
+	# Close connection
+	cur.close()
+
+	if result > 0:
+		return render_template('settings.html', userData = userData)
+	else:
+		return "Something went wrong"
 
 if __name__ == '__main__':
 	app.secret_key = 'secret123'

@@ -14,9 +14,19 @@
 				<div class="card border-primary mb-3">
 					<div class="card-header"></div>
 					<div class="card-body text-primary">
-						<h4 class="card-title">&nbsp;to&nbsp;</h4>
+						<h4 class="card-title"><u>{{ rideRequest.fromLocation }}</u>&nbsp;to&nbsp;<u>{{ rideRequest.toLocation }}</u></h4>
 						<p class="card-text">
 							<p>
+								On {{ rideRequest.rideDate }}
+							</p>
+							<p>
+								Request By {{ rideRequest.fname }}&nbsp;{{ rideRequest.fname }}
+							</p>
+							<p>
+								Gender : {{ rideRequest.gender }}
+							</p>
+							<p>
+								Contact No : {{ rideRequest.contactNo }}
 							</p>
 							<form action="" method="POST" class="text-center">
 								<input type="hidden" value="{{ RequestsId }}" name="rideId">
