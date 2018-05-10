@@ -25,16 +25,28 @@
 				</div>
 				<div class="form-group">
 					<label for="">Gender</label>
-					<input type="text" name="gender" class="form-control" value="{{ userData.gender }}" required>
+					<select name="gender" class="form-control" required>
+						<option value="">Select Gender</option>
+						<option value="MALE" 
+							{% if userData.gender == 'MALE' %} 
+								selected 
+							{% endif %}>
+						Male</option>
+						<option value="FEMALE" 
+							{% if userData.gender == 'FEMALE' %} 
+								selected 
+							{% endif %}>
+						Female</option>
+					</select>
 				</div>
 				<hr>
 				<div class="form-group">
 					<label for="">Driving Licence</label>
-					<input type="text" name="driving" class="form-control" value="{{ userData.driving }}" required>
+					<input type="text" name="driving" class="form-control" value="{% if userData.driving %}{{ userData.driving }}{% endif %}" required>
 				</div>
 				<div class="form-group">
 					<label for="">Aadhar ID</label>
-					<input type="text" name="aadharID" class="form-control" value="{{ userData.aadhar }}" required>
+					<input type="text" name="aadharID" class="form-control" value="{% if userData.aadhar %}{{ userData.aadhar }}{% endif %}" required>
 				</div>
 				<hr>
 				<div class="form-group">

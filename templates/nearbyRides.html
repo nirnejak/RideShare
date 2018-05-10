@@ -12,13 +12,20 @@
 		{% for ride in rides %}
 			<div class="col-lg-4 animated fadeInUp">
 				<div class="card border-primary mb-3">
-					<div class="card-header">{{ ride.rideTime }}</div>
+					<div class="card-header">Ride Time : {{ ride.rideTime }}</div>
 					<div class="card-body text-primary">
 						<h4 class="card-title">{{ ride.fromLocation }}&nbsp;to&nbsp;{{ ride.toLocation }}</h4>
 						<p class="card-text">
 							<p>
 								{{ ride.city }},
 								{{ ride.state }},
+							</p>
+							<p>
+								<b>Shared by :</b> {{ ride.fname }}&nbsp;{{ ride.lname }}
+								<br>
+								<b>Gender :</b> {{ ride.gender }}
+								<br>
+								<b>Contact No :</b> {{ ride.contactNo }}
 							</p>
 							<form action="" method="POST" class="text-center">
 								<input type="hidden" value="{{ ride.RideId }}" name="rideId">
@@ -30,30 +37,4 @@
 			</div>
 		{% endfor %}
 	</div>
-	<div class="row">
-        <div class="col-md-12">
-            <div class="card animated fadeInUp">
-                <div class="card-header ">
-                    Google Maps
-                </div>
-                <div class="card-body">
-                    <div id="map" class="map"></div>
-                     <script>
-                      function initMap() {
-                        var uluru = {lat: 25.363, lng: 81.044};
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                          zoom: 6,
-                          center: uluru
-                        });
-                        var marker = new google.maps.Marker({
-                          position: uluru,
-                          map: map
-                        });
-                      }
-                    </script>
-                    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC90Jzbgl1gtkE7AaE3nQL4HTK_wYfaSFQ&callback=initMap"></script>
-                </div>
-            </div>
-        </div>   
-    </div>
 {% endblock %}

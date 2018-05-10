@@ -1,10 +1,10 @@
-from wtforms import Form, StringField, IntegerField, TextAreaField, PasswordField, validators
+from wtforms import Form, StringField, IntegerField, TextAreaField, PasswordField, SelectField,	 validators
 
 # Register Form Class
 class RegisterForm(Form):
 	fname = StringField('First Name', [validators.Length(min = 1, max = 50)], description='First Name')
 	lname = StringField('Last Name', [validators.Length(min = 1, max = 50)], description='Last Name')
-	gender = StringField('Gender', [validators.Length(min = 1, max = 50)], description='Gender')
+	gender = SelectField('Gender', choices=[('MALE', 'Male'), ('FEMALE', 'Female')], description='Gender')
 	driving = StringField('Driving License No', description='Driving License No.')
 	aadhar = StringField('Aadhar Card No.', description='Aadhar Card No.')
 	contactNo = StringField('Contact Number', [validators.Length(min = 1, max = 15)], description='Contact No')
@@ -23,3 +23,5 @@ class RegisterForm(Form):
 	colony = StringField('Colony', [validators.Length(min = 1, max = 50)], description='Colony')
 	city = StringField('City', [validators.Length(min = 1, max = 50)], description='City')
 	state = StringField('State', [validators.Length(min = 1, max = 50)], description='State')
+
+	#gender = StringField('Gender', [validators.Length(min = 1, max = 50)], description='Gender')

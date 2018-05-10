@@ -34,7 +34,7 @@ def has_aadhar(f):
 			return f(*args, **kwargs)
 		else:
 			flash('You Don\'t have Aadhar ID. Goto <a href=\"/settings\">Settings</a> and Update Aadhar Details.','warning')
-			return redirect(url_for('login'))
+			return redirect(url_for('dashboard'))
 	return wrap
 
 # Check if user has driving license
@@ -45,5 +45,5 @@ def has_driving(f):
 			return f(*args, **kwargs)
 		else:
 			flash('You Don\'t have Driving License. Goto <a href=\"/settings\">Settings</a> and Update Driving License Details.','warning')
-			return redirect(url_for('login'))
+			return redirect(url_for('dashoard'))
 	return wrap

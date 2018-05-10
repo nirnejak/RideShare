@@ -75,10 +75,10 @@ def register():
 			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, "NONE"))
 		elif len(aadhar)!=0 and len(driving)==0:
 			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"AADHAR"))
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, "AADHAR"))
 		elif len(aadhar)==0 and len(driving)!=0:
 			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"DRIVING"))
+			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, driving,"DRIVING"))
 		elif len(aadhar)!=0 and len(driving)!=0:
 			# Add User into Database
 			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"BOTH"))
@@ -196,7 +196,7 @@ def nearbyRides():
 	cur = mysql.connection.cursor()
 
 	# Add User into Database
-	result = cur.execute("SELECT * FROM ride WHERE rideDate = DATE(NOW()) and city = %s and rideStatus = %s",(session['city'],"PENDING"))
+	result = cur.execute("SELECT * FROM ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING"))
 
 	rides = cur.fetchall()
 
@@ -220,6 +220,21 @@ def rideRequests():
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
 			flash('You Don\'t have Driving License!','warning')
 			return redirect(url_for('dashboard'))
+		
+		rideId = request.form['rideId']
+
+		# Create cursor
+		cur = mysql.connection.cursor()
+
+		# Update User Details into the Database
+		cur.execute("UPDATE Ride SET rideStatus = 'DONE' WHERE RideId = %s",[rideId])
+
+		# Comit to DB
+		mysql.connection.commit()
+
+		# Close connection
+		cur.close()
+
 
 	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
 			flash('You Don\'t have Driving License!','warning')
@@ -228,8 +243,7 @@ def rideRequests():
 	# Create cursor
 	cur = mysql.connection.cursor()
 
-	# Add User into Database
-
+	# Fetch all the ShareRequests and Details
 	result = cur.execute("SELECT * FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
 
 	rideRequests = cur.fetchall()
@@ -267,7 +281,7 @@ def shareRide():
 		# Create cursor
 		cur = mysql.connection.cursor()
 
-		# Add User into Database
+		# Add Ride into the Database
 		cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, city, state) VALUES (%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, city, state))
 
 		# Comit to DB
@@ -314,10 +328,10 @@ def settings():
 		# Create cursor
 		cur = mysql.connection.cursor()
 
-		# Add User into Database
+		# Update User Details into the Database
 		cur.execute("UPDATE users SET contactNo=%s, alternateContactNo=%s, email=%s, gender = %s, driving=%s, aadhar=%s, addLine1=%s, addLine2= %s, colony= %s, city=%s, state = %s, userStatus = %s WHERE userId = %s",(contactNo, alternateContactNo, email, gender, driving, aadharID, addLine1, addLine2, colony, city, state, userStatus, session['userId']))
 
-		session['userId'] = userStatus
+		session['userStatus'] = userStatus
 
 		# Comit to DB
 		mysql.connection.commit()
@@ -332,7 +346,7 @@ def settings():
 	# Create cursor
 	cur = mysql.connection.cursor()
 
-	# Add User into Database
+	# Fetch User Details from the Database
 	result = cur.execute("SELECT * FROM users WHERE userId = %s", [session['userId']])
 
 	userData = cur.fetchone()
