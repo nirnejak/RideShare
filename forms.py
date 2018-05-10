@@ -23,5 +23,3 @@ class RegisterForm(Form):
 	colony = StringField('Colony', [validators.Length(min = 1, max = 50)], description='Colony')
 	city = StringField('City', [validators.Length(min = 1, max = 50)], description='City')
 	state = StringField('State', [validators.Length(min = 1, max = 50)], description='State')
-
-	#gender = StringField('Gender', [validators.Length(min = 1, max = 50)], description='Gender')

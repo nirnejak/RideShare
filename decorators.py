@@ -33,7 +33,7 @@ def has_aadhar(f):
 		if session['userStatus'] in ['BOTH','AADHAR']:
 			return f(*args, **kwargs)
 		else:
-			flash('You Don\'t have Aadhar ID. Goto <a href=\"/settings\">Settings</a> and Update Aadhar Details.','warning')
+			flash('You Don\'t have Aadhar ID. Update Aadhar Details goto <a href=\"/settings\">Settings</a>.','warning')
 			return redirect(url_for('dashboard'))
 	return wrap
 
@@ -44,6 +44,6 @@ def has_driving(f):
 		if session['userStatus'] in ['BOTH','DRIVING']:
 			return f(*args, **kwargs)
 		else:
-			flash('You Don\'t have Driving License. Goto <a href=\"/settings\">Settings</a> and Update Driving License Details.','warning')
+			flash('You Don\'t have Driving License. Update Driving License Details goto <a href=\"/settings\">Settings</a>.','warning')
 			return redirect(url_for('dashoard'))
 	return wrap
