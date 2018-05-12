@@ -2,21 +2,27 @@
 
 {% block body %}
 	<div class="container text-center">
-		<div class="card border-secondary mb-4 animated fadeInUp" style="max-width: 25rem;">
-			<div class="card-header">Login</div>
-			<div class="card-body text-secondary">
-				<form action="" method="POST">
-					<div class="form-group">
-						<input type="text" name="username" placeholder="Contact No. or Email" class="form-control" value="{{ request.form.username }}" required>
+		<div class="row">
+			<div class="col-lg-3"></div>
+			<div class="col-lg-6">
+				<div class="card border-secondary animated fadeInUp">
+					<div class="card-header">Login</div>
+					<div class="card-body text-secondary">
+						<form action="" method="POST">
+							<div class="form-group">
+								<input type="text" name="username" placeholder="Contact No. or Email" class="form-control" value="{{ request.form.username }}" required>
+							</div>
+							<div class="form-group">
+								<input type="password" name="password" class="form-control" placeholder="Password" value="{{ request.form.password }}" required>
+							</div>
+							<p class="text-center">
+								<button type="submit" class="btn btn-primary">Login</button>
+							</p>
+						</form>
 					</div>
-					<div class="form-group">
-						<input type="password" name="password" class="form-control" placeholder="Password" value="{{ request.form.password }}" required>
-					</div>
-					<p class="text-center">
-						<button type="submit" class="btn btn-primary">Login</button>
-					</p>
-				</form>
+				</div>
 			</div>
+			<div class="col-lg-3"></div>
 		</div>
 	</div>
 {% endblock %}

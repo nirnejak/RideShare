@@ -1,39 +1,43 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<h1 class="animated fadeIn">Share Ride</h1>
+	<h1 class="text-white animated fadeIn">Share Ride</h1>
 	<br>
-	<hr>
-	<p class="lead">
-		Share your ride
-	</p>
-	<hr>
-	<div class="row">
-		<div class="card-body text-primary">
-			<form action="" method="POST">
-				<div class="form-group">
-					<input type="text" name="fromLocation" placeholder="From" class="form-control" required>
-				</div>
-				<div class="form-group">
-					<input type="text" name="toLocation" placeholder="To" class="form-control" required>
-				</div>
-				<div class="form-group">
-					<input type="text" name="city" placeholder="City" class="form-control" required>
-				</div>
-				<div class="form-group">
-					<input type="text" name="state" placeholder="State" class="form-control" required>
-				</div>
-				<div class="form-group">
-					<label for="date">Date</label>
-					<input type="date" id="date" name="rideDate" placeholder="Date and Time" class="form-control" required>
-				</div>
-				<div class="form-group">
-					<label for="time">Time</label>
-					<input type="time" id="time" name="rideTime" placeholder="Date and Time" class="form-control" required>
-				</div>
-					<button type="submit" class="btn btn-primary">Share Ride</button>
-				</p>
-			</form>
+	<hr color="white">
+	<div class="jumbotron animated fadeInUp">
+		<p class="lead">
+			Provide the given details to Share your ride.
+		</p>
+		<hr>
+		<div class="row">
+			<div class="card-body text-primary">
+				<form action="" method="POST">
+					<div class="form-group">
+						<input type="text" name="fromLocation" placeholder="From" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="text" name="toLocation" placeholder="To" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="text" name="city" placeholder="City" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="text" name="state" placeholder="State" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="date">Date</label>
+						<input type="date" id="date" name="rideDate" placeholder="Date and Time" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="time">Time</label>
+						<input type="time" id="time" name="rideTime" placeholder="Date and Time" class="form-control" required>
+					</div>
+					<br>
+					<p class="text-center">
+						<button type="submit" class="btn btn-primary">Share Ride</button>
+					</p>
+				</form>
+			</div>
 		</div>
 	</div>
 {% endblock %}

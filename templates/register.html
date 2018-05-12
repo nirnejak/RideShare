@@ -1,36 +1,43 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<div class="card border-secondary mb-4 animated fadeInUp" style="max-width: 25rem;">
-		<div class="card-header">Register</div>
-		<div class="card-body text-secondary">
-			{% from "includes/_formhelpers.html" import render_field %}
-			<form action="" method="POST" accept-charset="utf-8">
-				{{ render_field(form.fname, class_= "form-control", placeholder=form.fname.description) }}
-				{{ render_field(form.lname, class_= "form-control", placeholder=form.lname.description) }}
-				{{ render_field(form.contactNo, class_= "form-control", placeholder=form.contactNo.description) }}
-				{{ render_field(form.gender, class_= "form-control", placeholder=form.gender.description) }}
-				{{ render_field(form.alternateContactNo, class_= "form-control", placeholder=form.alternateContactNo.description) }}
-				{{ render_field(form.emailID, class_= "form-control", placeholder=form.emailID.description) }}
-				<hr>
-				{{ render_field(form.driving, class_= "form-control", placeholder=form.driving.description) }}
-				{{ render_field(form.aadhar, class_= "form-control", placeholder=form.aadhar.description) }}
-				<hr>
-				{{ render_field(form.password, class_= "form-control", placeholder=form.password.description) }}
-				{{ render_field(form.confirm, class_= "form-control", placeholder=form.confirm.description) }}
-				<hr>
-				{{ render_field(form.addLine1, class_= "form-control", placeholder=form.addLine1.description) }}
-				{{ render_field(form.addLine2, class_= "form-control", placeholder=form.addLine2.description) }}
-				
-				{{ render_field(form.colony, class_= "form-control", placeholder=form.colony.description) }}
-				{{ render_field(form.city, class_= "form-control", placeholder=form.city.description) }}
-				{{ render_field(form.state, class_= "form-control", placeholder=form.state.description) }}
+<div class="container text-center">
+	<div class="row">
+		<div class="col-lg-3"></div>
+		<div class="col-lg-6">
+			<div class="card border-secondary animated fadeInUp">
+				<div class="card-header">Register</div>
+				<div class="card-body text-secondary">
+					{% from "includes/_formhelpers.html" import render_field %}
+					<form action="" method="POST" accept-charset="utf-8">
+						{{ render_field(form.fname, class_= "form-control", placeholder=form.fname.description) }}
+						{{ render_field(form.lname, class_= "form-control", placeholder=form.lname.description) }}
+						{{ render_field(form.contactNo, class_= "form-control", placeholder=form.contactNo.description) }}
+						{{ render_field(form.gender, class_= "form-control", placeholder=form.gender.description) }}
+						{{ render_field(form.alternateContactNo, class_= "form-control", placeholder=form.alternateContactNo.description) }}
+						{{ render_field(form.emailID, class_= "form-control", placeholder=form.emailID.description) }}
+						<hr>
+						{{ render_field(form.driving, class_= "form-control", placeholder=form.driving.description) }}
+						{{ render_field(form.aadhar, class_= "form-control", placeholder=form.aadhar.description) }}
+						<hr>
+						{{ render_field(form.password, class_= "form-control", placeholder=form.password.description) }}
+						{{ render_field(form.confirm, class_= "form-control", placeholder=form.confirm.description) }}
+						<hr>
+						{{ render_field(form.addLine1, class_= "form-control", placeholder=form.addLine1.description) }}
+						{{ render_field(form.addLine2, class_= "form-control", placeholder=form.addLine2.description) }}
+						
+						{{ render_field(form.colony, class_= "form-control", placeholder=form.colony.description) }}
+						{{ render_field(form.city, class_= "form-control", placeholder=form.city.description) }}
+						{{ render_field(form.state, class_= "form-control", placeholder=form.state.description) }}
 
-				<p class="text-center">
-					<input type="submit" value="Register" class="btn btn-primary">
-				</p>
-			</form>
+						<p class="text-center">
+							<input type="submit" value="Register" class="btn btn-primary">
+						</p>
+					</form>
+				</div>
+			</div>
 		</div>
+		<div class="col-lg-3"></div>
 	</div>
-
+</div>
 {% endblock %}

@@ -1,15 +1,32 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<h1 class="animated fadeIn">About</h1>
+	<h1 class="text-white animated fadeIn">About</h1>
 	<br>
-	<hr>
+	<hr color="white">
 		<div class="jumbotron animated fadeInUp">
 			<br><br>
 			<p class="lead">
-				Hello there, we created RideShare with an objective to help people share their ride.
-				It'll help people save money and reduce pollution
+				Hello Welcome to RideShare.
+				<br><br>
+				We created RideShare with an objective to help people share their ride.	It'll help in reducing traffic and pollution. It;ll also help people save valuable resources and some money.
+				<br><br>
+				<h4>How it works?</h4>
+				It's a place where you can find people who are interested in sharing their Vehicle. You can look for available rides in your city. If you find any ride for your destination you can send them a request to join their ride. If they are also interested they can connect to you and accept your request.
+				<br>
+				On the other hand you can also share your Ride. You can Post the details about your ride, your timing, Destintion and you can share your ride. People Interested in your ride will send you request. You can see all the request. Contact the one who looks appealing to you. Accept the desired request. and You both can share the ride.
+				<br><br>
+				With RideShare we're aiming to target the problem of Traffic and Pollution. It will also conserve resources and people can personally save money. We're excited to see how you make use of it.
 			</p>
+			<br><br>
+			{% if session.logged_in %}
+				<div class="text-center">
+					<a class="btn btn-lg btn-success" href="/shareRide">Share Ride</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="btn btn-lg btn-primary" href="/nearbyRides">Nearby Rides</a>
+				</div>
+			{% else %}
+			{% endif %}
 		</div>
 
 	<hr>

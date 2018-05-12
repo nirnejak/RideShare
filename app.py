@@ -115,19 +115,14 @@ def login():
 		if result>0:
 			# Get stored hash
 			data = cur.fetchone()
-			password = data['password']
-			userId = data['userId']
-			userStatus = data['userStatus']
-			userType = data['userType']
-			city = data['city']
 
 			# Compate Passwords
-			if sha256_crypt.verify(password_candidate, password):
+			if sha256_crypt.verify(password_candidate, data['password']):
 				session['logged_in'] = True
-				session['userId'] = userId
-				session['userStatus'] = userStatus
-				session['userType'] = userType
-				session['city'] = city
+				session['userId'] = data['userId']
+				session['userStatus'] = data['userStatus']
+				session['userType'] = data['userType']
+				session['city'] = data['city']
 				
 				msg = "Welcome {} {}".format(data['fname'],data['lname'])
 				flash(msg,'success')
@@ -235,6 +230,8 @@ def rideRequests():
 		# Close connection
 		cur.close()
 
+		flash('Request accepted for the ride','success')
+		return redirect(url_for('dashboard'))
 
 	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
 			flash('You Don\'t have Driving License!','warning')
