@@ -24,10 +24,10 @@ from forms import RegisterForm
 app = Flask(__name__)
 
 # Config MySQL
-app.config['MYSQL_HOST'] = 'db4free.net'
-app.config['MYSQL_USER'] = 'rideshare_user'
-app.config['MYSQL_PASSWORD'] = 'jitu1234'
-app.config['MYSQL_DB'] = 'rideshare'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'RideShare'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 #init MYSQL
