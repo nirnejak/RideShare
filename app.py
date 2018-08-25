@@ -8,7 +8,7 @@ from flask import session
 from flask import logging
 from passlib.hash import sha256_crypt
 
-from flask_mysqldb import MySQL
+import psycopg2 as pg2
 
 import os
 
@@ -21,17 +21,12 @@ from decorators import has_driving
 # Importing Forms
 from forms import RegisterForm
 
+# Importing database credentials
+from database_credentials import credentials
+
 app = Flask(__name__)
 
-# Config MySQL
-app.config['MYSQL_HOST'] = 'db4free.net'
-app.config['MYSQL_USER'] = 'rideshare_user'
-app.config['MYSQL_PASSWORD'] = 'jitu1234'
-app.config['MYSQL_DB'] = 'rideshare'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-#init MYSQL
-mysql = MySQL(app)
+conn = pg2.connect(database = credentials['database'], user = credentials['user'], password = credentials['password'], host = credentials['host'], port = credentials['port'])
 
 # Index
 @app.route('/')
@@ -68,23 +63,28 @@ def register():
 		state = form.state.data
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		if len(aadhar)==0 and len(driving)==0:
-			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, "NONE"))
-		elif len(aadhar)!=0 and len(driving)==0:
-			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, "AADHAR"))
-		elif len(aadhar)==0 and len(driving)!=0:
-			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, driving,"DRIVING"))
-		elif len(aadhar)!=0 and len(driving)!=0:
-			# Add User into Database
-			cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"BOTH"))
+		try:
+			if len(aadhar)==0 and len(driving)==0:
+				# Add User into Database
+				cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, "NONE"))
+			elif len(aadhar)!=0 and len(driving)==0:
+				# Add User into Database
+				cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, "AADHAR"))
+			elif len(aadhar)==0 and len(driving)!=0:
+				# Add User into Database
+				cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, gender, driving,"DRIVING"))
+			elif len(aadhar)!=0 and len(driving)!=0:
+				# Add User into Database
+				cur.execute("INSERT INTO users(fname, lname, contactNo, alternateContactNo, email, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving, userStatus) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (fname, lname, contactNo, alternateContactNo, emailID, password, addLine1, addLine2, colony, city, state, aadhar, gender, driving,"BOTH"))
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('login'))
 
 		# Comit to DB
-		mysql.connection.commit()
+		conn.commit()
 
 		# Close connection
 		cur.close()
@@ -104,27 +104,31 @@ def login():
 		password_candidate = request.form['password']
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		# Get user by either Email or ContactNo
-		if '@' in username:
-			result = cur.execute("SELECT userId, password, userStatus, userType, fname, lname, city FROM users WHERE email = %s",[username])
-		else:
-			result = cur.execute("SELECT userId, password, userStatus, userType, fname, lname, city FROM users WHERE contactNo = %s",[username])
+		try:
+			# Get user by either Email or ContactNo
+			if '@' in username:
+				cur.execute("SELECT userId, password, userStatus, userType, fname, lname, city FROM users WHERE email = %s",[username])
+			else:
+				cur.execute("SELECT userId, password, userStatus, userType, fname, lname, city FROM users WHERE contactNo = %s",[username])
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('login'))
 
-		if result>0:
-			# Get stored hash
-			data = cur.fetchone()
+		result = cur.fetchone()
 
+		if result:
 			# Compate Passwords
-			if sha256_crypt.verify(password_candidate, data['password']):
+			if sha256_crypt.verify(password_candidate, result[1]):
 				session['logged_in'] = True
-				session['userId'] = data['userId']
-				session['userStatus'] = data['userStatus']
-				session['userType'] = data['userType']
-				session['city'] = data['city']
+				session['userId'] = result[0]
+				session['userStatus'] = result[2]
+				session['userType'] = result[3]
+				session['city'] = result[6]
 				
-				msg = "Welcome {} {}".format(data['fname'],data['lname'])
+				msg = "Welcome {} {}".format(result[4],result[5])
 				flash(msg,'success')
 
 				return redirect(url_for('dashboard'))
@@ -164,16 +168,22 @@ def nearbyRides():
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
 			flash('You Don\'t have Aadhar ID!','warning')
 			return redirect(url_for('dashboard'))
+		
 		RideId = request.form['rideId']
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		# Add User into Database
-		cur.execute("INSERT INTO ShareRequest(RideID, requestUserId) VALUES (%s, %s)", (RideId, session['userId']))
+		try:
+			# Add User into Database
+			cur.execute("INSERT INTO ShareRequest(RideID, requestUserId) VALUES (%s, %s);", (RideId, session['userId']))
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
 
 		# Comit to DB
-		mysql.connection.commit()
+		conn.commit()
 
 		# Close connection
 		cur.close()
@@ -188,21 +198,26 @@ def nearbyRides():
 		return redirect(url_for('dashboard'))
 
 	# Create cursor
-	cur = mysql.connection.cursor()
+	cur = conn.cursor()
 
-	# Add User into Database
-	result = cur.execute("SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING"))
-
+	try:
+		# Add User into Database
+		cur.execute("SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING"))
+	except:
+		conn.rollback()
+		flash('Something went wrong','danger')
+		return redirect(url_for('dashboard'))
+	
 	rides = cur.fetchall()
 
 	# Comit to DB
-	mysql.connection.commit()
+	conn.commit()
 
 	# Close connection
 	cur.close()
 
-	if result>0:
-		return render_template('nearbyRides.html',rides = rides)
+	if rides:
+		return render_template('nearbyRides.html', rides = rides)
 	else:
 		flash('No Rides in your city!','warning')
 		return redirect(url_for('dashboard'))
@@ -219,13 +234,18 @@ def rideRequests():
 		rideId = request.form['rideId']
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		# Update User Details into the Database
-		cur.execute("UPDATE Ride SET rideStatus = 'DONE' WHERE RideId = %s",[rideId])
+		try:
+			# Update User Details into the Database
+			cur.execute("UPDATE Ride SET rideStatus = 'DONE' WHERE RideId = %s",[rideId])
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
 
 		# Comit to DB
-		mysql.connection.commit()
+		conn.commit()
 
 		# Close connection
 		cur.close()
@@ -238,20 +258,25 @@ def rideRequests():
 			return redirect(url_for('dashboard'))
 
 	# Create cursor
-	cur = mysql.connection.cursor()
+	cur = conn.cursor()
 
-	# Fetch all the ShareRequests and Details
-	result = cur.execute("SELECT * FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
+	try:
+		# Fetch all the ShareRequests and Details
+		cur.execute("SELECT * FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
+	except:
+		conn.rollback()
+		flash('Something went wrong','danger')
+		return redirect(url_for('dashboard'))
 
 	rideRequests = cur.fetchall()
 
 	# Comit to DB
-	mysql.connection.commit()
+	conn.commit()
 
 	# Close connection
 	cur.close()
 
-	if result>0:
+	if rideRequests:
 		return render_template('rideRequests.html', rideRequests = rideRequests)
 	else:
 		flash('No Requests for Your Ride!','warning')
@@ -276,13 +301,18 @@ def shareRide():
 		state = request.form['state']
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		# Add Ride into the Database
-		cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, city, state) VALUES (%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, city, state))
+		try:
+			# Add Ride into the Database
+			cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, city, state) VALUES (%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, city, state))
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
 
 		# Comit to DB
-		mysql.connection.commit()
+		conn.commit()
 
 		# Close connection
 		cur.close()
@@ -323,15 +353,20 @@ def settings():
 			userStatus = "BOTH"
 
 		# Create cursor
-		cur = mysql.connection.cursor()
+		cur = conn.cursor()
 
-		# Update User Details into the Database
-		cur.execute("UPDATE users SET contactNo=%s, alternateContactNo=%s, email=%s, gender = %s, driving=%s, aadhar=%s, addLine1=%s, addLine2= %s, colony= %s, city=%s, state = %s, userStatus = %s WHERE userId = %s",(contactNo, alternateContactNo, email, gender, driving, aadharID, addLine1, addLine2, colony, city, state, userStatus, session['userId']))
+		try:
+			# Update User Details into the Database
+			cur.execute("UPDATE users SET contactNo=%s, alternateContactNo=%s, email=%s, gender = %s, driving=%s, aadhar=%s, addLine1=%s, addLine2= %s, colony= %s, city=%s, state = %s, userStatus = %s WHERE userId = %s",(contactNo, alternateContactNo, email, gender, driving, aadharID, addLine1, addLine2, colony, city, state, userStatus, session['userId']))
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
 
 		session['userStatus'] = userStatus
 
 		# Comit to DB
-		mysql.connection.commit()
+		conn.commit()
 
 		# Close connection
 		cur.close()
@@ -341,17 +376,22 @@ def settings():
 		return redirect(url_for('dashboard'))
 
 	# Create cursor
-	cur = mysql.connection.cursor()
+	cur = conn.cursor()
 
-	# Fetch User Details from the Database
-	result = cur.execute("SELECT * FROM users WHERE userId = %s", [session['userId']])
+	try:
+		# Fetch User Details from the Database
+		cur.execute("SELECT * FROM users WHERE userId = %s", [session['userId']])
+	except:
+		conn.rollback()
+		flash('Something went wrong','danger')
+		return redirect(url_for('dashboard'))
 
 	userData = cur.fetchone()
 
 	# Close connection
 	cur.close()
 
-	if result > 0:
+	if userData:
 		return render_template('settings.html', userData = userData)
 	else:
 		return "Something went wrong"

@@ -1,5 +1,5 @@
 CREATE TABLE users(
-	userId BIGSERIAL PRIMARY KEY, 
+	userId INT(11) AUTO_INCREMENT PRIMARY KEY, 
 	fname VARCHAR(100), 
 	lname VARCHAR(100), 
 	gender VARCHAR(50),
@@ -17,16 +17,16 @@ CREATE TABLE users(
 	city VARCHAR(100),
 	state VARCHAR(100),
 
-	userStatus VARCHAR(50) DEFAULT 'LOGGEDIN',
-	userType VARCHAR(50) DEFAULT 'CUSTOMER'
+	userStatus VARCHAR(50) DEFAULT "LOGGEDIN",
+	userType VARCHAR(50) DEFAULT "CUSTOMER"
 );
 
 CREATE TABLE Ride(
-	RideId BIGSERIAL PRIMARY KEY, 
-	creatorUserId INT, # ID of user who sent the request
+	RideId INT(11) AUTO_INCREMENT PRIMARY KEY, 
+	creatorUserId INT(11), # ID of user who sent the request
 	rideDate DATE,
 	rideTime TIME,
-	rideStatus VARCHAR(50) DEFAULT 'PENDING',
+	rideStatus VARCHAR(50) DEFAULT "PENDING",
 
 	fromLocation VARCHAR(100),
 	toLocation VARCHAR(100),
@@ -36,9 +36,9 @@ CREATE TABLE Ride(
 
 
 CREATE TABLE ShareRequest(
-	RequestID BIGSERIAL PRIMARY KEY,
-	RideID INT,
-	requestUserId INT #ID of user who sent the request
+	RequestID INT(11) AUTO_INCREMENT PRIMARY KEY,
+	RideID INT(11),
+	requestUserId INT(11) # ID of user who sent the request
 );
 
 

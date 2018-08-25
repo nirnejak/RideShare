@@ -14,27 +14,27 @@
 				<form action="" method="POST">
 					<div class="form-group">
 						<label for="">Contact No</label>
-						<input type="text" name="contactNo" class="form-control" value="{{ userData.contactNo }}" required>
+						<input type="text" name="contactNo" class="form-control" value="{{ userData[6] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Alternate Contact No</label>
-						<input type="text" name="alternateContactNo" class="form-control" value="{{ userData.alternateContactNo }}" required>
+						<input type="text" name="alternateContactNo" class="form-control" value="{{ userData[7] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Email</label>
-						<input type="text" name="email" class="form-control" value="{{ userData.email }}" required>
+						<input type="text" name="email" class="form-control" value="{{ userData[8] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Gender</label>
 						<select name="gender" class="form-control" required>
 							<option value="">Select Gender</option>
 							<option value="MALE" 
-								{% if userData.gender == 'MALE' %} 
+								{% if userData[3] == 'MALE' %} 
 									selected 
 								{% endif %}>
 							Male</option>
 							<option value="FEMALE" 
-								{% if userData.gender == 'FEMALE' %} 
+								{% if userData[3] == 'FEMALE' %} 
 									selected 
 								{% endif %}>
 							Female</option>
@@ -43,32 +43,32 @@
 					<hr>
 					<div class="form-group">
 						<label for="">Driving Licence</label>
-						<input type="text" name="driving" class="form-control" value="{% if userData.driving %}{{ userData.driving }}{% endif %}" required>
+						<input type="text" name="driving" class="form-control" value="{% if userData[4] %}{{ userData[4] }}{% endif %}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Aadhar ID</label>
-						<input type="text" name="aadharID" class="form-control" value="{% if userData.aadhar %}{{ userData.aadhar }}{% endif %}" required>
+						<input type="text" name="aadharID" class="form-control" value="{% if userData[5] %}{{ userData[5] }}{% endif %}" required>
 					</div>
 					<hr>
 					<div class="form-group">
 						<label for="">Address Line 1</label>
-						<input type="text" name="addLine1" class="form-control" value="{{ userData.addLine1 }}" required>
+						<input type="text" name="addLine1" class="form-control" value="{{ userData[11] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Address Line 2</label>
-						<input type="text" name="addLine2" class="form-control" value="{{ userData.addLine2 }}" required>
+						<input type="text" name="addLine2" class="form-control" value="{{ userData[12] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">Colony</label>
-						<input type="text" name="colony" class="form-control" value="{{ userData.colony }}" required>
+						<input type="text" name="colony" class="form-control" value="{{ userData[13] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">City</label>
-						<input type="text" name="city" class="form-control" value="{{ userData.city }}" required>
+						<input type="text" name="city" class="form-control" value="{{ userData[14] }}" required>
 					</div>
 					<div class="form-group">
 						<label for="">State</label>
-						<input type="text" name="state" class="form-control" value="{{ userData.state }}" required>
+						<input type="text" name="state" class="form-control" value="{{ userData[15] }}" required>
 					</div>
 					<br>
 					<p class="text-center">
