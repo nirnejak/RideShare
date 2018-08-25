@@ -19,8 +19,8 @@ In this way people can contact and share rides.
 Clone the Project
 
 ```sh
-$ git clone https://github.com/JitendraNirnejak/rideshare.git
-$ cd sass_boilerplate
+$ git clone https://github.com/JitendraNirnejak/RideShare.git
+$ cd RideShare
 ```
 
 ### Installation
