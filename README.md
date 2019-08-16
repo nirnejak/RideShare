@@ -19,7 +19,7 @@ In this way people can contact and share rides.
 Clone the Project
 
 ```sh
-$ git clone https://github.com/JitendraNirnejak/RideShare.git
+$ git clone https://github.com/nirnejak/RideShare.git
 $ cd RideShare
 ```
 
