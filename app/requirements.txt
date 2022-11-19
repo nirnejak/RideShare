@@ -1,0 +1,5 @@
+flask
+passlib
+flask-wtf
+gunicorn
+psycopg2-binary

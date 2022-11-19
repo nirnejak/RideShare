@@ -10,7 +10,7 @@ from passlib.hash import sha256_crypt
 
 import psycopg2 as pg2
 
-import os
+import os, sys, time
 
 # Import from own library
 from decorators import is_logged_in
@@ -27,7 +27,47 @@ from database_credentials import credentials
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "747b60ab7ef6e02cf56da6503adae95198fa6dad"
 
-conn = pg2.connect(database = credentials['database'], user = credentials['user'], password = credentials['password'], host = credentials['host'], port = credentials['port'])
+# conn = pg2.connect(
+# 	database = credentials['database'],
+# 	user = credentials['user'],
+# 	password = credentials['password'],
+# 	host = credentials['host'],
+# 	port = credentials['port']
+# )
+
+print(f'\n\n\nTrying to connect to {os.environ.get("POSTGRES_HOST")}', file=sys.stderr)
+print(f'User: {os.environ.get("POSTGRES_USER")}', file=sys.stderr)
+print(f'Password: {os.environ.get("POSTGRES_PASSWORD")}', file=sys.stderr)
+print(f'Port: {os.environ.get("POSTGRES_PORT")}', file=sys.stderr)
+print('')
+
+startup_duration = 0
+timeout_s = 5
+start_time = time.time()
+last_exception = None
+conn = None
+
+while (startup_duration < timeout_s):
+	try:
+		startup_duration = time.time() - start_time
+		conn = pg2.connect(
+			database = os.environ.get('POSTGRES_DB'),
+			user = os.environ.get('POSTGRES_USER'),
+			password = os.environ.get('POSTGRES_PASSWORD'),
+			host = os.environ.get('POSTGRES_HOST'),
+			port = os.environ.get('POSTGRES_PORT')
+		)
+		break
+	except Exception as e:
+		print(f'Elapsed: {int(startup_duration)} / {timeout_s} seconds')
+		last_exception = e
+		time.sleep(1)
+if conn is None:
+	print(f'Could not connect to the database within {timeout_s} seconds - {last_exception}')
+	exit()
+
+connection_status = ('Not connected', 'Connected')[conn.closed == 0]
+print(f'Connection status: {connection_status}\n\n', file=sys.stderr, flush=True)
 
 # Index
 @app.route('/')
@@ -203,7 +243,9 @@ def nearbyRides():
 
 	try:
 		# Add User into Database
-		cur.execute("SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING"))
+		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
+		query = "SELECT * FROM Ride r, users u where r.creatoruserid != u.userid"
+		cur.execute(query)
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
