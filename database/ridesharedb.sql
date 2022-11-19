@@ -23,7 +23,7 @@ CREATE TABLE users(
 
 CREATE TABLE Ride(
 	RideId BIGSERIAL PRIMARY KEY, 
-	creatorUserId INT, # ID of user who sent the request
+	creatorUserId INT,
 	rideDate DATE,
 	rideTime TIME,
 	rideStatus VARCHAR(50) DEFAULT 'PENDING',
@@ -38,5 +38,5 @@ CREATE TABLE Ride(
 CREATE TABLE ShareRequest(
 	RequestID BIGSERIAL PRIMARY KEY,
 	RideID INT,
-	requestUserId INT #ID of user who sent the request
+	requestUserId INT
 );
