@@ -23,4 +23,6 @@ services:
       FLASK_DEBUG: True
     links:
       - "db:database"
+    volumes:
+      - ./app:/app
   
