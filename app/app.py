@@ -265,6 +265,72 @@ def nearbyRides():
 		flash('No Rides in your city!','warning')
 		return redirect(url_for('dashboard'))
 
+@app.route('/womennearbyRides', methods=['GET','POST'])
+@is_logged_in
+@has_aadhar
+def womennearbyRides():
+	if request.method == 'POST':
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have PID!','warning')
+			return redirect(url_for('dashboard'))
+		
+		RideId = request.form['rideId']
+
+		# Create cursor
+		cur = conn.cursor()
+
+		try:
+			# Add User into Database
+			cur.execute("INSERT INTO ShareRequest(RideID, requestUserId) VALUES (%s, %s);", (RideId, session['userId']))
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
+
+		# Comit to DB
+		conn.commit()
+
+		# Close connection
+		cur.close()
+
+		
+		flash('Your Request for Ride is sent to the user!','success')
+		return redirect(url_for('dashboard'))
+	
+
+	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
+		flash('You Don\'t have PID!','warning')
+		return redirect(url_for('dashboard'))
+
+	# Create cursor
+	cur = conn.cursor()
+
+	try:
+		# Add User into Database
+		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
+		query = "SELECT * FROM Ride r, users u where u.gender = 'FEMALE' and r.creatoruserid != u.userid"
+		cur.execute(query)
+	except:
+		conn.rollback()
+		flash('Something went wrong','danger')
+		return redirect(url_for('dashboard'))
+	
+	rides = cur.fetchall()
+
+	# Comit to DB
+	conn.commit()
+
+	# Close connection
+	cur.close()
+
+	if rides:
+		return render_template('womennearbyRides.html', rides = rides)
+	else:
+		flash('No Rides in your city with women drivers!','warning')
+		return redirect(url_for('dashboard'))
+
+
+
 @app.route('/rideRequests', methods=['GET','POST'])
 @is_logged_in
 @has_driving
