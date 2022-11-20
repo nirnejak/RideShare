@@ -6,7 +6,7 @@
 	<hr color="white">
 	<div class="jumbotron animated fadeInUp">
 		<p class="lead">
-			Provide the given details to Share your ride.
+			Provide Ride Share Details
 		</p>
 		<hr>
 		<div class="row">
@@ -34,6 +34,13 @@
 					<div class="form-group">
 						<label for="time">Time</label>
 						<input type="time" id="time" name="rideTime" placeholder="Date and Time" class="form-control" required>
+					</div>
+					<div class="form-group" style="padding: 10px;">
+						<input type="radio" name="carState" id="option1" value="Will drive own car"> I Have My Own Car </input><br>
+						<input type="radio" name="carState" id="option2" value="Will book a cab"> I Will Book a Cab </input><br>
+					</div>
+					<div class="form-group">
+						<input type="text" name="message" placeholder="Any other message for potential passengers?" class="form-control" >
 					</div>
 					<br>
 					<p class="text-center">

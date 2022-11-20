@@ -42,7 +42,7 @@ print(f'Port: {os.environ.get("POSTGRES_PORT")}', file=sys.stderr)
 print('')
 
 startup_duration = 0
-timeout_s = 5
+timeout_s = 30
 start_time = time.time()
 last_exception = None
 conn = None
@@ -244,7 +244,7 @@ def nearbyRides():
 	try:
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
-		query = "SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING'"
+		query = "SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, carstatus, message FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING'"
 		cur.execute(query)
 	except:
 		conn.rollback()
@@ -431,13 +431,15 @@ def shareRide():
 		seats = request.form['seats']			
 		city = request.form['city']
 		state = request.form['state']
+		carStatus = request.form['carState']
+		message = request.form['message']
 
 		# Create cursor
 		cur = conn.cursor()
 
 		try:
 			# Add Ride into the Database
-			cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, seats, city, state) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, seats, city, state))
+			cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, seats, city, state,carStatus,message) VALUES (%s,%s, %s, %s, %s, %s, %s,%s,%s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, seats, city, state,carStatus,message))
 		except:
 			conn.rollback()
 			flash('Something went wrong','danger')

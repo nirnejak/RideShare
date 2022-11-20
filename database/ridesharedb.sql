@@ -29,7 +29,9 @@ CREATE TABLE Ride(
 	toLocation VARCHAR(100),
 	seats INT, 
 	city VARCHAR(100),
-	state VARCHAR(100)
+	state VARCHAR(100),
+	carStatus VARCHAR(256),
+	message VARCHAR(256)
 );
 
 
