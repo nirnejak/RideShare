@@ -99,7 +99,7 @@ def register():
 		# User Address
 		addLine1 = form.addLine1.data
 		addLine2 = form.addLine2.data
-		colony = form.colony.data
+		colony = ""
 		city = form.city.data
 		state = form.state.data
 
@@ -381,7 +381,7 @@ def settings():
 		aadharID = request.form['aadharID']
 		addLine1 = request.form['addLine1']
 		addLine2 = request.form['addLine2']
-		colony = request.form['colony']
+		colony = ""
 		city = request.form['city']
 		state = request.form['state']
 
