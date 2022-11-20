@@ -356,13 +356,34 @@ def rideRequests():
 			return redirect(url_for('dashboard'))
 
 		s = cur.fetchone()
-
 		seats = s[0]
+		cur.close()
 
+		cur = conn.cursor()
+       
+		
+		try:
+			# fetching the request creater ID
+			cur.execute("select requestuserid from sharerequest s,ride r where s.rideid=r.rideid")
+		except:
+			conn.rollback()
+			flash('Something went wrong','danger')
+			return redirect(url_for('dashboard'))
+
+		requestUser= cur.fetchone()
+		requestUserId=requestUser[0]
+		
+
+	
+		
+		print(rideId,file=sys.stderr)
+		print(session['userId'],file=sys.stderr)
+		print(requestUserId,file=sys.stderr)
 		if seats - 1 > 0:
 			try:
 				# Update User Details into the Database
 				cur.execute("UPDATE Ride SET seats = %s",[seats-1])
+				cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
 			except:
 				conn.rollback()
 				flash('Something went wrong','danger')
@@ -415,6 +436,57 @@ def rideRequests():
 		return redirect(url_for('dashboard'))
 
 	return render_template('rideRequests.html')
+
+@app.route('/acceptedRides', methods=['GET','POST'])
+@is_logged_in
+@has_driving
+def acceptedRides():
+	if request.method == 'POST':
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+			flash('You Don\'t have Driving License!','warning')
+			return redirect(url_for('dashboard'))
+		
+		rideId = request.form['rideId']
+		
+		# Create cursor
+		cur = conn.cursor()
+
+		
+		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'AADHAR' or session['userStatus'] == 'NONE':
+				flash('You Don\'t have Driving License!','warning')
+				return redirect(url_for('dashboard'))
+
+	# Create cursor
+	cur = conn.cursor()
+
+	try:
+		# Fetch all the ShareRequests and Details
+		#cur.execute("SELECT * FROM passenger p, ride r, users u WHERE r.RideId = p.rideid AND p.creatoruserid = %s AND p.requestUserId = u.userId",[session['userId']])
+		cur.execute("SELECT r.ridetime, r.ridetime,r.fromlocation, r.tolocation, r.city, r.state, u.fname, u.lname, u.gender, u.contactno, p.rideid FROM passenger p, ride r, users u WHERE r.RideId = p.rideid AND p.creatoruserid = %s AND p.requestUserId = u.userId",[session['userId']])
+
+	except:
+		conn.rollback()
+		flash('Something went wrong','danger')
+		return redirect(url_for('dashboard'))
+
+	acceptedRides = cur.fetchall()
+
+	# Comit to DB
+	conn.commit()
+
+	# Close connection
+	cur.close()
+
+	if rideRequests:
+		return render_template('acceptedRides.html', acceptedRides = acceptedRides)
+	else:
+		flash('No Passengers for Your Ride!','warning')
+		return redirect(url_for('dashboard'))
+
+	return render_template('accepetedRides.html')
+
+
+
 
 @app.route('/shareRide', methods=['GET','POST'])
 @is_logged_in

@@ -40,3 +40,9 @@ CREATE TABLE ShareRequest(
 	RideID INT,
 	requestUserId INT
 );
+CREATE TABLE Passenger(
+	PassengerID BIGSERIAL PRIMARY KEY,
+	RideID INT,
+	creatorUserId INT,
+	requestUserId INT
+)
