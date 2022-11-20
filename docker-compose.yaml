@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: ridesharedb
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/postgresql/data
   app:
     build: ./app
     ports:
