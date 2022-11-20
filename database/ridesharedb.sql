@@ -27,8 +27,9 @@ CREATE TABLE Ride(
 	rideStatus VARCHAR(50) DEFAULT 'PENDING',
 	fromLocation VARCHAR(100),
 	toLocation VARCHAR(100),
-	state VARCHAR(100),
-	city VARCHAR(100)
+	seats INT, 
+	city VARCHAR(100),
+	state VARCHAR(100)
 );
 
 

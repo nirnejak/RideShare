@@ -15,23 +15,25 @@
 		{% for ride in rides %}
 			<div class="col-lg-4 animated fadeInUp">
 				<div class="card border-primary mb-3">
-					<div class="card-header">Ride Time : {{ ride[3] }}</div>
+					<div class="card-header">Ride Time : {{ ride[0] }}</div>
 					<div class="card-body text-primary">
-						<h4 class="card-title">{{ ride[5] }}&nbsp;to&nbsp;{{ ride[6] }}</h4>
+						<h4 class="card-title">{{ ride[1] }}&nbsp;to&nbsp;{{ ride[2] }}</h4>
 						<p class="card-text">
 							<p>
-								{{ ride[8] }},
-								{{ ride[7] }},
+								{{ ride[3] }},
+								{{ ride[4] }}
 							</p>
 							<p>
-								<b>Shared by :</b> {{ ride[10] }}&nbsp;{{ ride[11] }}
+								<b>Shared by :</b> {{ ride[5] }}&nbsp;{{ ride[6] }}
 								<br>
-								<b>Gender :</b> {{ ride[12] }}
+								<b>Gender :</b> {{ ride[7] }}
 								<br>
-								<b>Contact No :</b> {{ ride[15] }}
+								<b>Seats Available :</b> {{ ride[8] }}
+								<br>
+								<b>Contact No :</b> {{ ride[9] }}
 							</p>
 							<form action="" method="POST" class="text-center">
-								<input type="hidden" value="{{ ride[0] }}" name="rideId">
+								<input type="hidden" value="{{ ride[10] }}" name="rideId">
 								<button class="btn btn-primary" type="submit">Send Request</button>
 							</form>
 						</p>
@@ -41,3 +43,11 @@
 		{% endfor %}
 	</div>
 {% endblock %}
+
+
+
+
+
+
+
+

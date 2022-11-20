@@ -244,7 +244,7 @@ def nearbyRides():
 	try:
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
-		query = "SELECT * FROM Ride r, users u where r.creatoruserid != u.userid"
+		query = "SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING'"
 		cur.execute(query)
 	except:
 		conn.rollback()
@@ -341,17 +341,39 @@ def rideRequests():
 			return redirect(url_for('dashboard'))
 		
 		rideId = request.form['rideId']
-
+		
 		# Create cursor
 		cur = conn.cursor()
 
+		
 		try:
-			# Update User Details into the Database
-			cur.execute("UPDATE Ride SET rideStatus = 'DONE' WHERE RideId = %s",[rideId])
+			# fetching no of seats
+			cur.execute("select seats from Ride where RideId = %s",[rideId])
 		except:
 			conn.rollback()
 			flash('Something went wrong','danger')
 			return redirect(url_for('dashboard'))
+
+		s = cur.fetchone()
+
+		seats = s[0]
+
+		if seats - 1 > 0:
+			try:
+				# Update User Details into the Database
+				cur.execute("UPDATE Ride SET seats = %s",[seats-1])
+			except:
+				conn.rollback()
+				flash('Something went wrong','danger')
+				return redirect(url_for('dashboard'))
+		else:
+			try:
+				# Update User Details into the Database
+				cur.execute("UPDATE Ride SET seats = %s,rideStatus = 'DONE'",[seats-1])
+			except:
+				conn.rollback()
+				flash('Something went wrong','danger')
+				return redirect(url_for('dashboard'))
 
 		# Comit to DB
 		conn.commit()
@@ -402,10 +424,11 @@ def shareRide():
 			flash('You Don\'t have Driving License!','warning')
 			return redirect(url_for('dashboard'))
 
-		rideDate = request.form['rideDate']
+		rideDate = request.form['rideDate']	
 		rideTime = request.form['rideTime']
 		fromLocation = request.form['fromLocation']
 		toLocation = request.form['toLocation']
+		seats = request.form['seats']			
 		city = request.form['city']
 		state = request.form['state']
 
@@ -414,7 +437,7 @@ def shareRide():
 
 		try:
 			# Add Ride into the Database
-			cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, city, state) VALUES (%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, city, state))
+			cur.execute("INSERT INTO Ride(creatorUserId, rideDate, rideTime, fromLocation, toLocation, seats, city, state) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)", (session['userId'], rideDate, rideTime, fromLocation, toLocation, seats, city, state))
 		except:
 			conn.rollback()
 			flash('Something went wrong','danger')
