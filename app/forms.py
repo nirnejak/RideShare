@@ -6,9 +6,8 @@ class RegisterForm(Form):
 	lname = StringField('Last Name', [validators.Length(min = 1, max = 50)], description='Last Name')
 	gender = SelectField('Gender', choices=[('MALE', 'Male'), ('FEMALE', 'Female')], description='Gender')
 	driving = StringField('Driving License No', description='Driving License No.')
-	aadhar = StringField('Aadhar Card No.', description='Aadhar Card No.')
+	aadhar = StringField('PID', description='PID')
 	contactNo = StringField('Contact Number', [validators.Length(min = 1, max = 15)], description='Contact No')
-	alternateContactNo = StringField('Alternate Contact Number', [validators.Length(min = 0, max = 15)], description='Alternate Contact No')
 	emailID = StringField('Email', [validators.Length(min = 0, max = 50)], description='Email')
 
 	password = PasswordField('Password',[

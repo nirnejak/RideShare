@@ -89,7 +89,7 @@ def register():
 		fname = form.fname.data
 		lname = form.lname.data
 		contactNo = form.contactNo.data
-		alternateContactNo = form.alternateContactNo.data
+		alternateContactNo = ""
 		emailID = form.emailID.data
 		gender = str(form.gender.data).upper()
 		driving = form.driving.data
@@ -207,7 +207,7 @@ def dashboard():
 def nearbyRides():
 	if request.method == 'POST':
 		if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
-			flash('You Don\'t have Aadhar ID!','warning')
+			flash('You Don\'t have PID!','warning')
 			return redirect(url_for('dashboard'))
 		
 		RideId = request.form['rideId']
@@ -235,7 +235,7 @@ def nearbyRides():
 	
 
 	if session['userStatus']=='REGISTERED' or session['userStatus'] == 'DRIVING' or session['userStatus'] == 'NONE':
-		flash('You Don\'t have Aadhar ID!','warning')
+		flash('You Don\'t have PID!','warning')
 		return redirect(url_for('dashboard'))
 
 	# Create cursor
@@ -374,7 +374,7 @@ def shareRide():
 def settings():
 	if request.method == 'POST':
 		contactNo = request.form['contactNo']
-		alternateContactNo = request.form['alternateContactNo']
+		alternateContactNo = ""
 		email = request.form['email']
 		gender = request.form['gender']
 		driving = request.form['driving']

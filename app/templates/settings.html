@@ -17,10 +17,6 @@
 						<input type="text" name="contactNo" class="form-control" value="{{ userData[6] }}" required>
 					</div>
 					<div class="form-group">
-						<label for="">Alternate Contact No</label>
-						<input type="text" name="alternateContactNo" class="form-control" value="{{ userData[7] }}" required>
-					</div>
-					<div class="form-group">
 						<label for="">Email</label>
 						<input type="text" name="email" class="form-control" value="{{ userData[8] }}" required>
 					</div>
@@ -46,7 +42,7 @@
 						<input type="text" name="driving" class="form-control" value="{% if userData[4] %}{{ userData[4] }}{% endif %}" required>
 					</div>
 					<div class="form-group">
-						<label for="">Aadhar ID</label>
+						<label for="">PID</label>
 						<input type="text" name="aadharID" class="form-control" value="{% if userData[5] %}{{ userData[5] }}{% endif %}" required>
 					</div>
 					<hr>
