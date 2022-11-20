@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h1 class="text-white animated fadeIn">Nearby Rides</h1>
+	<br>
+	<hr color="white">
+	<p class="text-white lead">
+		List of all the rides available in your city with women drivers
+	</p>
+	<hr color="white">
+    <div style="padding: 20px;">
+	<a class="btn btn-lg btn-success" style="margin-left: 900px; text-align: center;padding-left: 22px;padding-right: 21px;" href="/nearbyRides">Show All Drivers</a>
+</div>
+	<div class="row">
+		{% for ride in rides %}
+			<div class="col-lg-4 animated fadeInUp">
+				<div class="card border-primary mb-3">
+					<div class="card-header">Ride Time : {{ ride[3] }}</div>
+					<div class="card-body text-primary">
+						<h4 class="card-title">{{ ride[5] }}&nbsp;to&nbsp;{{ ride[6] }}</h4>
+						<p class="card-text">
+							<p>
+								{{ ride[8] }},
+								{{ ride[7] }},
+							</p>
+							<p>
+								<b>Shared by :</b> {{ ride[10] }}&nbsp;{{ ride[11] }}
+								<br>
+								<b>Gender :</b> {{ ride[12] }}
+								<br>
+								<b>Contact No :</b> {{ ride[15] }}
+							</p>
+							<form action="" method="POST" class="text-center">
+								<input type="hidden" value="{{ ride[0] }}" name="rideId">
+								<button class="btn btn-primary" type="submit">Send Request</button>
+							</form>
+						</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
