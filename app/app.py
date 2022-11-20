@@ -240,12 +240,13 @@ def nearbyRides():
 
 	# Create cursor
 	cur = conn.cursor()
-
+	print(session['userId'], file=sys.stderr)
+	ui=session['userId']
 	try:
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
-		query = "SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, carstatus, message FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING'"
-		cur.execute(query)
+		#query = "select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid not in (%s);"(ui)
+		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
@@ -304,12 +305,12 @@ def womennearbyRides():
 
 	# Create cursor
 	cur = conn.cursor()
-
+	ui = session['userId']
 	try:
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
-		query = "SELECT * FROM Ride r, users u where u.gender = 'FEMALE' and r.creatoruserid != u.userid"
-		cur.execute(query)
+		#query = "SELECT * FROM Ride r, users u where u.gender = 'FEMALE' and r.creatoruserid != u.userid"
+		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where gender = 'FEMALE' and u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
