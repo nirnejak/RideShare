@@ -15,7 +15,7 @@
 		{% for ride in rides %}
 			<div class="col-lg-4 animated fadeInUp">
 				<div class="card border-primary mb-3">
-					<div class="card-header">Ride Time : {{ ride[0] }}</div>
+					<div class="card-header">On <b>{{ ride[15] }}</b> at <b>{{ ride[0] }}</b></div>
 					<div class="card-body text-primary">
 						<h4 class="card-title">{{ ride[1] }}&nbsp;to&nbsp;{{ ride[2] }}</h4>
 						<p class="card-text">
@@ -32,9 +32,9 @@
 								<br>
 								<b>Contact No :</b> {{ ride[9] }}
 								<br>
-								<b>Car Status :</b> {{ ride[11] }}
+								<b>Car Status :</b> {{ ride[13] }}
 								<br>
-								<b>Message :</b> {{ ride[12] }}
+								<b>Message :</b> {{ ride[14] }}
 							</p>
 							<form action="" method="POST" class="text-center">
 								<input type="hidden" value="{{ ride[10] }}" name="rideId">

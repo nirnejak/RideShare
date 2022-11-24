@@ -246,7 +246,7 @@ def nearbyRides():
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
 		#query = "select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid not in (%s);"(ui)
-		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
+		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid, r.carstatus, r.message, ridedate  FROM users u, ride r where u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
@@ -310,7 +310,7 @@ def womennearbyRides():
 		# Add User into Database
 		# query_original = "SELECT * FROM Ride r, users u WHERE r.rideDate = DATE(NOW()) AND r.city = %s AND r.rideStatus = %s AND r.creatorUserId = u.userId",(session['city'],"PENDING")
 		#query = "SELECT * FROM Ride r, users u where u.gender = 'FEMALE' and r.creatoruserid != u.userid"
-		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid  FROM users u, ride r where gender = 'FEMALE' and u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
+		cur.execute("select * from (SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, rideid, r.creatoruserid, u.userid, ridedate  FROM users u, ride r where gender = 'FEMALE' and u.userid=r.creatoruserid and r.ridestatus='PENDING') as A where A.userid != %s",[ui])
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
@@ -370,20 +370,22 @@ def rideRequests():
 			flash('Something went wrong','danger')
 			return redirect(url_for('dashboard'))
 
-		requestUser= cur.fetchone()
-		requestUserId=requestUser[0]
+		requestUser= cur.fetchall()
+		requestUserIds=requestUser
 		
 
 	
 		
 		print(rideId,file=sys.stderr)
 		print(session['userId'],file=sys.stderr)
-		print(requestUserId,file=sys.stderr)
+		print(requestUserIds,file=sys.stderr)
 		if seats - 1 > 0:
 			try:
 				# Update User Details into the Database
 				cur.execute("UPDATE Ride SET seats = %s",[seats-1])
-				cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
+				for requestUserId in requestUserIds:
+					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
+					cur.execute("delete from sharerequest s where s.requestUserId in (select s.requestUserId from sharerequest s,passenger p where s.requestUserId=p.requestUserId )")
 			except:
 				conn.rollback()
 				flash('Something went wrong','danger')
@@ -392,6 +394,9 @@ def rideRequests():
 			try:
 				# Update User Details into the Database
 				cur.execute("UPDATE Ride SET seats = %s,rideStatus = 'DONE'",[seats-1])
+				for requestUserId in requestUserIds:
+					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
+					cur.execute("delete from sharerequest s where s.requestUserId in (select s.requestUserId from sharerequest s,passenger p where s.requestUserId=p.requestUserId )")
 			except:
 				conn.rollback()
 				flash('Something went wrong','danger')
@@ -415,7 +420,7 @@ def rideRequests():
 
 	try:
 		# Fetch all the ShareRequests and Details
-		cur.execute("SELECT * FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
+		cur.execute("SELECT ridetime, fromlocation, tolocation, r.city, r.state, fname, lname, gender, seats, contactno, r.rideid, r.creatoruserid, u.userid, ridedate  FROM ShareRequest s, Ride r, users u WHERE r.RideId = s.RideID AND r.rideStatus = 'PENDING' AND r.creatorUserId = %s AND s.requestUserId = u.userId",[session['userId']])
 	except:
 		conn.rollback()
 		flash('Something went wrong','danger')
@@ -462,7 +467,7 @@ def acceptedRides():
 	try:
 		# Fetch all the ShareRequests and Details
 		#cur.execute("SELECT * FROM passenger p, ride r, users u WHERE r.RideId = p.rideid AND p.creatoruserid = %s AND p.requestUserId = u.userId",[session['userId']])
-		cur.execute("SELECT r.ridetime, r.ridetime,r.fromlocation, r.tolocation, r.city, r.state, u.fname, u.lname, u.gender, u.contactno, p.rideid FROM passenger p, ride r, users u WHERE r.RideId = p.rideid AND p.creatoruserid = %s AND p.requestUserId = u.userId",[session['userId']])
+		cur.execute("SELECT DISTINCT r.ridedate, r.ridetime,r.fromlocation, r.tolocation, r.city, r.state,  u.fname, u.lname, u.gender, u.contactno, p.rideid FROM passenger p, ride r, users u WHERE r.RideId = p.rideid AND p.creatoruserid = %s AND p.requestUserId = u.userId",[session['userId']])
 
 	except:
 		conn.rollback()
