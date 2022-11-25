@@ -383,8 +383,11 @@ def rideRequests():
 			try:
 				# Update User Details into the Database
 				cur.execute("UPDATE Ride SET seats = %s",[seats-1])
+
+
+
 				for requestUserId in requestUserIds:
-					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
+					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserIds[0]))
 					cur.execute("delete from sharerequest s where s.requestUserId in (select s.requestUserId from sharerequest s,passenger p where s.requestUserId=p.requestUserId )")
 			except:
 				conn.rollback()
@@ -395,7 +398,7 @@ def rideRequests():
 				# Update User Details into the Database
 				cur.execute("UPDATE Ride SET seats = %s,rideStatus = 'DONE'",[seats-1])
 				for requestUserId in requestUserIds:
-					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId))
+					cur.execute("INSERT INTO passenger(rideid, creatoruserid, requestuserid) VALUES (%s,%s,%s);", (rideId, session['userId'] ,requestUserId[0]))
 					cur.execute("delete from sharerequest s where s.requestUserId in (select s.requestUserId from sharerequest s,passenger p where s.requestUserId=p.requestUserId )")
 			except:
 				conn.rollback()
