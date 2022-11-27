@@ -8,7 +8,7 @@ class RegisterForm(Form):
 	driving = StringField('Driving License No', description='Driving License No.')
 	aadhar = StringField('PID', description='PID')
 	contactNo = StringField('Contact Number', [validators.Length(min = 1, max = 15)], description='Contact No')
-	emailID = StringField('Email', [validators.Length(min = 0, max = 50)], description='Email')
+	emailID = StringField('Email', [validators.Length(min = 0, max = 50),validators.Regexp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$',message='please provide VT email')], description='Email')
 	password = PasswordField('Password',[
 			validators.DataRequired(),
 			validators.EqualTo('confirm', message='Passwords do not match')
