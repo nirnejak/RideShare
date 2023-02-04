@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h1 class="text-white animated fadeIn">Nearby Rides</h1>
+	<br>
+	<hr color="white">
+	<p class="text-white lead">
+		List of all the rides available in your city
+	</p>
+	<hr color="white">
+	<div style="padding: 20px;">
+	<a class="btn btn-lg btn-success" style="margin-left: 900px;" href="/womennearbyRides">Women Driver Only</a>
+	</div>
+	<div class="row">
+		{% for ride in rides %}
+			<div class="col-lg-4 animated fadeInUp">
+				<div class="card border-primary mb-3">
+					<div class="card-header">On <b>{{ ride[15] }}</b> at <b>{{ ride[0] }}</b></div>
+					<div class="card-body text-primary">
+						<h4 class="card-title">{{ ride[1] }}&nbsp;to&nbsp;{{ ride[2] }}</h4>
+						<p class="card-text">
+							<p>
+								{{ ride[3] }},
+								{{ ride[4] }}
+							</p>
+							<p>
+								<b>Shared by :</b> {{ ride[5] }}&nbsp;{{ ride[6] }}
+								<br>
+								<b>Gender :</b> {{ ride[7] }}
+								<br>
+								<b>Seats Available :</b> {{ ride[8] }}
+								<br>
+								<b>Contact No :</b> {{ ride[9] }}
+								<br>
+								<b>Car Status :</b> {{ ride[13] }}
+								<br>
+								<b>Message :</b> {{ ride[14] }}
+							</p>
+							<form action="" method="POST" class="text-center">
+								<input type="hidden" value="{{ ride[10] }}" name="rideId">
+								<button class="btn btn-primary" type="submit">Send Request</button>
+							</form>
+						</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+
+
+
+
+
+
+

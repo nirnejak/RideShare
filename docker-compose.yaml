@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15-bullseye
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ridesharedb
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/postgresql/data
+  app:
+    build: ./app
+    ports:
+      - "7070:7070"
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ridesharedb
+      POSTGRES_PORT: 5432
+      FLASK_DEBUG: True
+    links:
+      - "db:database"
+    volumes:
+      - ./app:/app
+  

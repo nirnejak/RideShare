@@ -1,0 +1,6 @@
+flask
+passlib
+flask-wtf
+gunicorn
+# psycopg2-binary # This doesn't work with M1 Macbooks
+psycopg2==2.9.3

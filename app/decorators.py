@@ -33,7 +33,7 @@ def has_aadhar(f):
 		if session['userStatus'] in ['BOTH','AADHAR']:
 			return f(*args, **kwargs)
 		else:
-			flash('You Don\'t have Aadhar ID. Update Aadhar Details goto <a href=\"/settings\">Settings</a>.','warning')
+			flash('You Don\'t have PID. Update PID Details goto <a href=\"/settings\">Settings</a>.','warning')
 			return redirect(url_for('dashboard'))
 	return wrap
 
